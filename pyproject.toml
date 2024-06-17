@@ -1,0 +1,36 @@
+[tool.poetry]
+name = "gpodder clone"
+version = "0.1.0"
+description = "gpodder.net clone in fastapi"
+authors = ["Agustin Arce <agustinarceprinrich@gmail.com>"]
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.10.0"
+fastapi = {extras = ["all"], version = "^0.111.0"}
+uvicorn = "0.23.2"
+htpy = "^24.4.0"
+pydantic-settings = "^2.3.2"
+pydantic = "^2.7.4"
+dnspython = "^2.6.1"
+beautifulsoup4 = "^4.12.3"
+requests = "^2.32.3"
+pymongo = "^4.7.3"
+bson = "^0.5.10"
+aiohttp = "^3.9.5"
+fake-useragent = "^1.5.1"
+sqlmodel = "^0.0.19"
+
+[tool.pyright]
+# https://github.com/microsoft/pyright/blob/main/docs/configuration.md
+useLibraryCodeForTypes = true
+exclude = [".cache"]
+
+[tool.ruff]
+# https://beta.ruff.rs/docs/configuration/
+select = ['E', 'W', 'F', 'I', 'B', 'C4', 'ARG', 'SIM']
+ignore = ['W291', 'W292', 'W293']
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
