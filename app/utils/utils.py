@@ -1,4 +1,3 @@
-
 import hashlib
 import json
 import re
@@ -7,7 +6,7 @@ from typing import List
 
 from fastapi.exceptions import HTTPException
 
-from schemas import Podcast
+from app.schemas.schemas import Podcast
 
 
 def get_file_hash(podcasts: List[Podcast]) -> str:
@@ -17,7 +16,9 @@ def get_file_hash(podcasts: List[Podcast]) -> str:
     if not podcasts:
         return ""
     try:
-        podcasts_json = json.dumps([podcast.model_dump_json() for podcast in podcasts], sort_keys=True)
+        podcasts_json = json.dumps(
+            [podcast.model_dump_json() for podcast in podcasts], sort_keys=True
+        )
         hash_object = hashlib.sha256(podcasts_json.encode())
         return hash_object.hexdigest()
 
@@ -26,18 +27,17 @@ def get_file_hash(podcasts: List[Podcast]) -> str:
         return ""
 
 
-
-
 def is_valid_email(email: str) -> bool:
-    pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    pattern = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
     return bool(re.match(pattern, email))
+
 
 def is_secure_password(password: str) -> bool:
     min_length = 8
-    pattern_uppercase = r'[A-Z]'
-    pattern_lowercase = r'[a-z]'
-    pattern_digit = r'\d'
-    pattern_special = r'[^A-Za-z0-9]'
+    pattern_uppercase = r"[A-Z]"
+    pattern_lowercase = r"[a-z]"
+    pattern_digit = r"\d"
+    pattern_special = r"[^A-Za-z0-9]"
     if len(password) < min_length:
         return False
     if not re.search(pattern_uppercase, password):
@@ -50,6 +50,7 @@ def is_secure_password(password: str) -> bool:
         return False
     return True
 
+
 def parse_opml(file_content: bytes) -> List[Podcast]:
     root = ET.fromstring(file_content)
     outlines = root.findall(".//outline")
@@ -60,17 +61,16 @@ def parse_opml(file_content: bytes) -> List[Podcast]:
         xmlUrl = outline.get("xmlUrl")
         htmlUrl = outline.get("htmlUrl")
         podcasts.append(
-            Podcast(title=title,
-                    type_=type_,
-                    xmlUrl=xmlUrl,
-                    htmlUrl=htmlUrl))
+            Podcast(title=title, type_=type_, xmlUrl=xmlUrl, htmlUrl=htmlUrl)
+        )
     return podcasts
 
 
 def handle_exception(error_message: str, status_code: int):
     raise HTTPException(status_code=status_code, detail=error_message)
 
-'''
+
+"""
 from fake_useragent import UserAgent
 from fake_useragent.fake import FakeUserAgent
 async def get_podcast_lang(xml_url: str, html_url: str) -> str:
@@ -106,4 +106,4 @@ async def get_podcast_lang(xml_url: str, html_url: str) -> str:
                 f"Error retrieving content from {xml_url} or {html_url}: {e}")
         except Exception as e:
             print(f"Error parsing content from {xml_url} or {html_url}: {e}")
-'''
+"""
